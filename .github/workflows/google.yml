@@ -68,6 +68,9 @@ jobs:
     #find docker image
     - name: Find Image?
       run: find . -name "Dockerfile"
+    #find docker requirements
+    - name: Find Image?
+      run: find . -name "requirements"
     # Build the Docker image
     - name: Build
       run: |-
