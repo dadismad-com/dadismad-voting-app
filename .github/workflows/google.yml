@@ -48,7 +48,7 @@ jobs:
         workload_identity_provider: 'projects/250238953270/locations/global/workloadIdentityPools/dadismad/providers/dadismad-github'
         service_account: 'dadismad-github-actions@macro-truck-198415.iam.gserviceaccount.com'
     - name: Updating UBU Image
-      run: apt-get update &&  DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata
+      run: sudo apt-get update &&  DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata
     - name: Echo stuff
       run: printenv
     # # Alternative option - authentication via credentials json
