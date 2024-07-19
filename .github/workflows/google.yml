@@ -46,7 +46,7 @@ jobs:
       with:
         token_format: 'access_token'
         workload_identity_provider: 'projects/250238953270/locations/global/workloadIdentityPools/dadismad/providers/dadismad-github'
-        service_account: 'dadismad-github-actions@macro-truck-198415.iam.gserviceaccount.com' #'my-service-account@my-project.iam.gserviceaccount.com'
+        service_account: 'dadismad-github-actions@macro-truck-198415.iam.gserviceaccount.com'
     - name: Echo stuff
       run: printenv
     # # Alternative option - authentication via credentials json
