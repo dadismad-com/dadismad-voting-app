@@ -23,7 +23,7 @@ env:
   GKE_ZONE: us-central1  # TODO: update to cluster zone
   DEPLOYMENT_NAME: sysdig-gke-test # TODO: update to deployment name
   REPOSITORY: dadismad # TODO: update to Artifact Registry docker repository
-  IMAGE: voter
+  IMAGE: vote
   IMAGE_TAG: latest
 
 jobs:
