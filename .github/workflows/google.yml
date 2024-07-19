@@ -22,7 +22,7 @@ env:
   GKE_CLUSTER: dadismad-cluster-1    # TODO: update to cluster name
   GKE_ZONE: us-central1  # TODO: update to cluster zone
   DEPLOYMENT_NAME: sysdig-gke-test # TODO: update to deployment name
-  REPOSITORY: gcr.io/macro-truck-198415 # TODO: update to Artifact Registry docker repository
+  REPOSITORY: gcr.io # TODO: update to Artifact Registry docker repository
   IMAGE: cdbbcce874fc
 
 jobs:
