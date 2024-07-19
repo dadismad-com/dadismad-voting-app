@@ -17,7 +17,7 @@ on:
     branches: [ "main" ]
 
 env:
-  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  PROJECT_ID: '${{ secrets.GKE_PROJECT }}'
   GAR_LOCATION: us-central1 # TODO: update region of the Artifact Registry
   GKE_CLUSTER: dadismad-cluster-1    # TODO: update to cluster name
   GKE_ZONE: us-central1  # TODO: update to cluster zone
@@ -47,8 +47,7 @@ jobs:
         token_format: 'access_token'
         workload_identity_provider: 'projects/250238953270/locations/global/workloadIdentityPools/dadismad/providers/dadismad-github'
         service_account: 'dadismad-github-actions@macro-truck-198415.iam.gserviceaccount.com'
-    - name: Updating UBU Image
-      run: sudo apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata
+
     - name: Echo stuff
       run: printenv
     # # Alternative option - authentication via credentials json
