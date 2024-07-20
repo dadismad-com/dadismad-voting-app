@@ -1,21 +1,15 @@
-apiVersion: networking.k8s.io/v1 # (or networking.k8s.io/v1 for newer clusters)
-kind: Ingress
+apiVersion: v1
+kind: Service
 metadata:
-  name: Ingress Controller  # Replace with your desired name
+  labels:
+    app: vote  # Replace with your application name
+  name: vote  # Replace with your desired service name
 spec:
-  rules:
-  - http:
-      paths:
-      - path: /vote  # Path for vote service
-        backend:
-          serviceName: vote-service  # Name of your vote service
-          servicePort: 80
-      - path: /result  # Path for result service
-        backend:
-          serviceName: result-service  # Name of your result service
-          servicePort: 80
-  # # Optional: Catch-all rule
-  # - path: /*  # Matches all other paths
-  #   backend:
-  #     serviceName: <your-default-service>  # Replace with service for unmatched paths (optional)
-  #     servicePort: 80 (or appropriate port)
+  type: LoadBalancer
+  ports:
+  - port: 80  # Port on which service listens for traffic
+    targetPort: 80  # Port on which pods expose the application
+    protocol: TCP  # The communication protocol (defaults to TCP)
+  selector:
+    app: vote  # Label selector to identify pods for the service
+
