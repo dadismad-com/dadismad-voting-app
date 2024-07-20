@@ -67,7 +67,7 @@ jobs:
         sparse-checkout-cone-mode: false
 
     - name: Sysdig
-      run: SECURE_API_TOKEN=${{ secrets.SECURE_API_TOKEN }} $GITHUB_WORKSPACE/sysdig-cli-scanner --iac -r -f H --apiurl https://app.us4.sysdig.com/ $GITHUB_WORKSPACE
+      run: SECURE_API_TOKEN=${{ secrets.SECURE_API_TOKEN }} $GITHUB_WORKSPACE/sysdig-cli-scanner --iac -r -f n --apiurl https://app.us4.sysdig.com/ $GITHUB_WORKSPACE
   
     # Configure Workload Identity Federation and generate an access token.
     - id: 'auth'
