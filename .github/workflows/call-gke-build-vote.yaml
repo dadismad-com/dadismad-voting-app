@@ -59,6 +59,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         sparse-checkout: |
+          ./sysdig-cli-scanner
           ${{ env.WORKING_DIRECTORY }}/**
           k8s-specifications/${{ env.WORKING_DIRECTORY }}-deployment.yaml
           k8s-specifications/${{ env.WORKING_DIRECTORY }}-service.yaml
