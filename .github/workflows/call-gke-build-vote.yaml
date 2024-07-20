@@ -102,7 +102,7 @@ jobs:
       uses: google-github-actions/deploy-gke@v0.0.1
       with:
         image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
-        app_name: my-app
+        app_name: voting-app
         region: ${{ env.GKE_ZONE }}
         cluster_name: ${{ env.GKE_CLUSTER }}
         project_id: ${{ env.PROJECT_ID }}
