@@ -46,9 +46,7 @@ jobs:
   setup-build-publish-deploy:
     name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ${{ env.WORKING_DIRECTORY }}
+    
     environment: dadismad-gke # numbskull.. you have to update the environment the variables are coming from. 
     permissions:
       contents: 'read'
