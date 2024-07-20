@@ -55,8 +55,6 @@ jobs:
       id-token: 'write'
 
     steps:
-    - name: Sysdig
-      run: SECURE_API_TOKEN=${{ secrets.SECURE_API_TOKEN }} ${{ env.GITHUB_WORKSPACE }}/sysdig-cli-scanner --iac --apiurl https://app.us4.sysdig.com/ ${{ env.GITHUB_WORKSPACE }}
     - name: Checkout
       uses: actions/checkout@v4
       with:
@@ -66,7 +64,9 @@ jobs:
           k8s-specifications/${{ env.WORKING_DIRECTORY }}-service.yaml
           k8s-specifications/${{ env.WORKING_DIRECTORY }}-service-lb.yaml
         sparse-checkout-cone-mode: false
-
+    - name: Sysdig
+      run: SECURE_API_TOKEN=${{ secrets.SECURE_API_TOKEN }} ${{ env.GITHUB_WORKSPACE }}/sysdig-cli-scanner --iac --apiurl https://app.us4.sysdig.com/ ${{ env.GITHUB_WORKSPACE }}
+  
     # Configure Workload Identity Federation and generate an access token.
     - id: 'auth'
       name: 'Authenticate to Google Cloud'
