@@ -17,17 +17,17 @@ on:
   push:
     branches:
       - 'main'
-    # only build when important files change
-    paths:
-      - 'vote/**'
-      #- '.github/workflows/call-docker-build-vote.yaml'
-  pull_request:
-    branches:
-      - 'main'
-    # only build when important files change
-    paths:
-      - 'vote/**'
-      #- '.github/workflows/call-docker-build-vote.yaml'
+  #   # only build when important files change
+  #   paths:
+  #     - 'vote/**'
+  #     #- '.github/workflows/call-docker-build-vote.yaml'
+  # pull_request:
+  #   branches:
+  #     - 'main'
+  #   # only build when important files change
+  #   paths:
+  #     - 'vote/**'
+  #     #- '.github/workflows/call-docker-build-vote.yaml'
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
@@ -37,12 +37,17 @@ env:
   DEPLOYMENT_NAME: sysdig-gke-test # TODO: update to deployment name
   REPOSITORY: dadismad # TODO: update to Artifact Registry docker repository
   IMAGE: vote
+  WORKING_DIRECTORY: vote
+
   IMAGE_TAG: latest
 
 jobs:
   setup-build-publish-deploy:
     name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING_DIRECTORY }}
     environment: dadismad-gke # numbskull.. you have to update the environment the variables are coming from. 
     permissions:
       contents: 'read'
@@ -76,7 +81,7 @@ jobs:
     - name: Set up GKE credentials
       uses: google-github-actions/get-gke-credentials@v2
       with:
-        context: vote
+
         cluster_name: ${{ env.GKE_CLUSTER }}
         location: ${{ env.GKE_ZONE }}
     #find docker image
@@ -85,6 +90,7 @@ jobs:
     #find docker requirements
     - name: Find Image?
       run: find . -name "requirements"
+
     # Build the Docker image #-f ./$IMAGE/Dockerfile 
     - name: Build
       run: |-
