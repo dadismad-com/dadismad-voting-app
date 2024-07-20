@@ -49,7 +49,7 @@ jobs:
     defaults:
       run:
         working-directory: ${{ env.WORKING_DIRECTORY }}
-    environment: dadismad-gke # numbskull.. you have to update the environment the variables are coming from. 
+    environment: dadismad-gke # numbskull. you have to update the environment the variables are coming from. 
     permissions:
       contents: 'read'
       id-token: 'write'
