@@ -98,6 +98,11 @@ jobs:
       run: |-
         docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA"
         
+    - name: Find config?
+      run: find . -name "k8s-specifications"
+
+    - name: Find config?
+      run: find . -name ".yaml"
     # - name: 'Deploy Vote'
     #   run: |
     #     kubectl create -f k8s-specifications/vote-deployment.yaml
