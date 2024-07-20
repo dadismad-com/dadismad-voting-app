@@ -97,20 +97,20 @@ jobs:
     - name: Publish
       run: |-
         docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA"
-    
-    - name: Deploy GKE
-      uses: google-github-actions/deploy-gke@v0.0.1
-      with:
-        image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
-        app_name: vote
-        region: ${{ env.GKE_ZONE }}
-        cluster_name: ${{ env.GKE_CLUSTER }}
-        project_id: ${{ env.PROJECT_ID }}
-        type: NodePort
-        port: 5000
-        targetPort: 80
-        nodePort: 31000
-        app: vote
+        
+    - name: 'Deploy Vote'
+      run: |
+        kubectl create -f k8s-specifications/vote-deployment.yaml
+        kubectl create -f k8s-specifications/vote-service.yaml
+
+      # - name: Deploy GKE
+    #   uses: google-github-actions/deploy-gke@v0.0.1
+    #   with:
+    #     image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
+    #     app_name: vote
+    #     region: ${{ env.GKE_ZONE }}
+    #     cluster_name: ${{ env.GKE_CLUSTER }}
+    #     project_id: ${{ env.PROJECT_ID }}
         # namespace: 'my-namespace'
         # expose: '8000'
     
