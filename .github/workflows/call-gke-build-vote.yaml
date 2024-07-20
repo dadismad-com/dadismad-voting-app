@@ -59,6 +59,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         sparse-checkout: |
+          vote/**
           k8s-specifications/vote-deployment.yaml
           k8s-specifications/vote-service.yaml
         sparse-checkout-cone-mode: false
