@@ -129,8 +129,8 @@ jobs:
     - uses: swdotcom/update-and-apply-kubernetes-configs@v1
       with:
         k8-config-file-paths: |
-          k8/vote-deployment.yaml
-          k8/vote-service.yaml
+          k8s-specifications/vote-deployment.yaml
+          k8s-specifications/vote-service.yaml
         replacement-method: defined
       env:
         IMAGE_TAG: ${{ env.IMAGE_TAG }}
