@@ -83,5 +83,5 @@ jobs:
     - uses: swdotcom/update-and-apply-kubernetes-configs@v1
       with:
         k8-config-file-paths: |
-          k8s-specifications/${{ env.WORKING_DIRECTORY }}-deployment.yaml
+          k8s-specifications/${{ env.WORKING_DIRECTORY }}-controller.yaml
         replacement-method: defined
