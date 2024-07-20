@@ -96,8 +96,8 @@ jobs:
     #     # ./kustomize build . | kubectl apply -f -
     #     # kubectl rollout status deployment/$DEPLOYMENT_NAME
     #     # kubectl get services -o wide
-    - name: Deploy to GKE - gke-deploy cli
-      uses: 'google-github-actions/deploy-gke-container@v0.1'
+    - name: Deploy GKE
+      uses: google-github-actions/deploy-gke@v0.0.1
       with:
         image: $IMAGE
         app_name: my-app
