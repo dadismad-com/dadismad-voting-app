@@ -13,8 +13,21 @@
 name: Build and Deploy to GKE
 
 on:
+  # we want pull requests so we can build(test) but not push to image registry
   push:
-    branches: [ "main" ]
+    branches:
+      - 'main'
+    # only build when important files change
+    paths:
+      - 'vote/**'
+      #- '.github/workflows/call-docker-build-vote.yaml'
+  pull_request:
+    branches:
+      - 'main'
+    # only build when important files change
+    paths:
+      - 'vote/**'
+      #- '.github/workflows/call-docker-build-vote.yaml'
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
@@ -71,14 +84,14 @@ jobs:
     #find docker requirements
     - name: Find Image?
       run: find . -name "requirements"
-    # Build the Docker image
+    # Build the Docker image #-f ./$IMAGE/Dockerfile 
     - name: Build
       run: |-
         docker build \
           --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA" \
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
-          -f ./$IMAGE/Dockerfile .
+          . 
     # Push the Docker image to Google Artifact Registry
     - name: Publish
       run: |-
