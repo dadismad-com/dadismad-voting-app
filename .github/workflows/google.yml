@@ -99,11 +99,11 @@ jobs:
     - name: Deploy GKE
       uses: google-github-actions/deploy-gke@v0.0.1
       with:
-        image: $IMAGE
+        image: ${{ env.IMAGE }}
         app_name: my-app
         region: us-central1
-        cluster_name: $GKE_CLUSTER
-        project_id: $PROJECT_ID
+        cluster_name: ${{ env.GKE_CLUSTER }}
+        project_id: ${{ env.PROJECT_ID }}
         # namespace: 'my-namespace'
         # expose: '8000'
     
