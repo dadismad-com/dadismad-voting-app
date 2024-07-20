@@ -34,7 +34,7 @@ env:
   GAR_LOCATION: us-central1 # TODO: update region of the Artifact Registry
   GKE_CLUSTER: dadismad-cluster-1    # TODO: update to cluster name
   GKE_ZONE: us-central1  # TODO: update to cluster zone
-  DEPLOYMENT_NAME: sysdig-gke-test # TODO: update to deployment name
+  DEPLOYMENT_NAME: vote-deployment # TODO: update to deployment name
   REPOSITORY: dadismad # TODO: update to Artifact Registry docker repository
   IMAGE: vote
   IMAGE_TAG: latest
@@ -102,10 +102,15 @@ jobs:
       uses: google-github-actions/deploy-gke@v0.0.1
       with:
         image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
-        app_name: voting-app
+        app_name: vote
         region: ${{ env.GKE_ZONE }}
         cluster_name: ${{ env.GKE_CLUSTER }}
         project_id: ${{ env.PROJECT_ID }}
+        type: NodePort
+        port: 5000
+        targetPort: 80
+        nodePort: 31000
+        app: vote
         # namespace: 'my-namespace'
         # expose: '8000'
     
