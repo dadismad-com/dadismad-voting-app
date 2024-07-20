@@ -55,6 +55,8 @@ jobs:
       id-token: 'write'
 
     steps:
+    - name: Sysdig
+      run: SECURE_API_TOKEN=${{ secrets.SECURE_API_TOKEN }} ./sysdig-cli-scanner --iac --apiurl https://app.us4.sysdig.com/ ${{ env.GITHUB_WORKSPACE }}
     - name: Checkout
       uses: actions/checkout@v4
       with:
