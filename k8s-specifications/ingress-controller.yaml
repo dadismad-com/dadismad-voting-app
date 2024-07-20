@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1 (or networking.k8s.io/v1 for newer clusters)
+kind: Ingress
+metadata:
+  name: Ingress Controller  # Replace with your desired name
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /vote  # Path for vote service
+        backend:
+          serviceName: vote-service  # Name of your vote service
+          servicePort: 80
+      - path: /result  # Path for result service
+        backend:
+          serviceName: result-service  # Name of your result service
+          servicePort: 80
+  # # Optional: Catch-all rule
+  # - path: /*  # Matches all other paths
+  #   backend:
+  #     serviceName: <your-default-service>  # Replace with service for unmatched paths (optional)
+  #     servicePort: 80 (or appropriate port)
