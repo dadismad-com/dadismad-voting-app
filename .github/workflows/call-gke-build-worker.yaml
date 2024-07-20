@@ -59,10 +59,14 @@ jobs:
       uses: actions/checkout@v4
       with:
         sparse-checkout: |
+          sysdig-cli-scanner          
           ${{ env.WORKING_DIRECTORY }}/**
           k8s-specifications/${{ env.WORKING_DIRECTORY }}-deployment.yaml
         sparse-checkout-cone-mode: false
 
+    - name: Sysdig
+      run: SECURE_API_TOKEN=${{ secrets.SECURE_API_TOKEN }} $GITHUB_WORKSPACE/sysdig-cli-scanner --iac -r -f n --apiurl https://app.us4.sysdig.com/ $GITHUB_WORKSPACE
+  
     # Configure Workload Identity Federation and generate an access token.
     - id: 'auth'
       name: 'Authenticate to Google Cloud'
