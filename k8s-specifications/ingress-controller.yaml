@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1 (or networking.k8s.io/v1 for newer clusters)
+apiVersion: extensions/v1beta1 # (or networking.k8s.io/v1 for newer clusters)
 kind: Ingress
 metadata:
   name: Ingress Controller  # Replace with your desired name
