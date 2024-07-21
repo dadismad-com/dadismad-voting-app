@@ -118,15 +118,15 @@ jobs:
       id: scan
       uses: sysdiglabs/scan-action@v5
       with:
-          image-tag: $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA
+          image-tag: $REPOSITORY/$IMAGE:$GITHUB_SHA
           sysdig-secure-token: ${{ secrets.SECURE_API_TOKEN }}
           sysdig-secure-url: ${{ secrets.SYSDIG_SECURE_URL }}
 
-    - name: Upload SARIF file
-      if: success() || failure()
-      uses: github/codeql-action/upload-sarif@v3
-      with:
-        sarif_file: ${{ env.GITHUB_WORKSPACE }}/sarif.json
+    # - name: Upload SARIF file
+    #   if: success() || failure()
+    #   uses: github/codeql-action/upload-sarif@v3
+    #   with:
+    #     sarif_file: ${{ env.GITHUB_WORKSPACE }}/sarif.json
 
     #Print Logs
     - name: Print Log
