@@ -69,6 +69,15 @@ jobs:
           k8s-specifications/${{ env.WORKING_DIRECTORY }}-service-lb.yaml
         sparse-checkout-cone-mode: false
 
+    #Scanning Infrastructure 
+    - name: Scan infrastructure
+      uses: sysdiglabs/scan-action@v5
+      with:
+        sysdig-secure-token: ${{ secrets.SECURE_API_TOKEN }}
+        sysdig-secure-url: ${{ secrets.SYSDIG_SECURE_URL }}
+        cli-scanner-version: 1.9.0
+        mode: iac
+        iac-scan-path: ./*
 
     # Configure Workload Identity Federation and generate an access token.
 
