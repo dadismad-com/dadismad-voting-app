@@ -99,10 +99,9 @@ jobs:
 
     #Scanning remote database
     - name: Scan image
-      id: scan
       uses: sysdiglabs/scan-action@v5
       with:
-          image-tag: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
+          image-tag: "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ env.IMAGE_TAG }}"
           sysdig-secure-token: ${{ secrets.SECURE_API_TOKEN }}
           sysdig-secure-url: ${{ secrets.SYSDIG_SECURE_URL }}
 
