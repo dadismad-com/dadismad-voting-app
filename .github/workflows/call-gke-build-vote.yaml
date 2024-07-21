@@ -111,7 +111,11 @@ jobs:
       with:
           image-tag: "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA"
           sysdig-secure-token: ${{ secrets.SECURE_API_TOKEN }}
-        
+
+    #Print Logs
+    - name: Print Log
+      run: cat /home/runner/work/dadismad-voting-app/dadismad-voting-app/scan-logs
+      
     # Push the Docker image to Google Artifact Registry
     - name: Publish
       run: |-
