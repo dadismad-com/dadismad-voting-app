@@ -109,8 +109,9 @@ jobs:
       id: scan
       uses: sysdiglabs/scan-action@v5
       with:
-          image-tag: "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA"
+          image-tag: "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$IMAGE_TAG"
           sysdig-secure-token: ${{ secrets.SECURE_API_TOKEN }}
+          sysdig-secure-url: ${{ secrets.SYSDIG_SECURE_URL }}
 
     #Print Logs
     - name: Print Log
