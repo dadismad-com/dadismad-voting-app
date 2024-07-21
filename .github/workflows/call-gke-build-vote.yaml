@@ -78,6 +78,7 @@ jobs:
         cli-scanner-version: 1.9.0
         mode: iac
         iac-scan-path: /
+        recursive: true
 
     # Configure Workload Identity Federation and generate an access token.
 
@@ -113,14 +114,7 @@ jobs:
           --build-arg GITHUB_REF="$GITHUB_REF" \
           . 
 
-    #Scanning after build 
-    - name: Scan image
-      id: scan
-      uses: sysdiglabs/scan-action@v5
-      with:
-          image-tag: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
-          sysdig-secure-token: ${{ secrets.SECURE_API_TOKEN }}
-          sysdig-secure-url: ${{ secrets.SYSDIG_SECURE_URL }}
+
 
     # - name: Upload SARIF file
     #   if: success() || failure()
@@ -137,6 +131,15 @@ jobs:
       run: |-
         docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA"
 
+    #Scanning after push 
+    - name: Scan image
+      id: scan
+      uses: sysdiglabs/scan-action@v5
+      with:
+          image-tag: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
+          sysdig-secure-token: ${{ secrets.SECURE_API_TOKEN }}
+          sysdig-secure-url: ${{ secrets.SYSDIG_SECURE_URL }}
+
     # K8 File configuration
     - name: Stating context to cluster
       run: kubectl config current-context
@@ -149,5 +152,5 @@ jobs:
         replacement-method: defined
       env:
         IMAGE_TAG: ${{ env.IMAGE_TAG }}
-       # CHANGE_CAUSE: ${{ github.event.release.tag_name }}
+ 
 
