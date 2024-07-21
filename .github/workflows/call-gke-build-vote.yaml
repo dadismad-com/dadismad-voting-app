@@ -102,20 +102,6 @@ jobs:
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
           . 
-    
-    #Scanning after build but before upload
-    - name: Scan image
-    id: scan
-    uses: sysdiglabs/scan-action@v5
-    with:
-        image-tag: sysdiglabs/dummy-vuln-app:latest
-        sysdig-secure-token: ${{ secrets.SECURE_API_TOKEN }}
-
-    - name: Upload SARIF
-    if: success() || failure()
-    uses: github/codeql-action/upload-sarif@v3
-    with:
-        sarif_file: ${{ env.WORKING_DIRECTORY }}/sarif.json
 
     # Push the Docker image to Google Artifact Registry
     - name: Publish
