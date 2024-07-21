@@ -99,11 +99,11 @@ jobs:
         cluster_name: ${{ env.GKE_CLUSTER }}
         location: ${{ env.GKE_ZONE }}
 
-    #Scanning remote database
+    #Scanning remote database - updated to look at public container
     - name: Scan image
-      uses: sysdiglabs/scan-action@v4
+      uses: sysdiglabs/scan-action@v5
       with:
-          image-tag: "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ env.IMAGE_TAG }}"
+          image-tag: "${{ env.IMAGE }}:${{ env.IMAGE_TAG }}"
           sysdig-secure-token: ${{ secrets.SECURE_API_TOKEN }}
           sysdig-secure-url: ${{ secrets.SYSDIG_SECURE_URL }}
     
