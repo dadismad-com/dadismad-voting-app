@@ -37,7 +37,7 @@ env:
   DEPLOYMENT_NAME: redis-deployment # TODO: update to deployment name
   REPOSITORY: dadismad # TODO: update to Artifact Registry docker repository
   IMAGE: redis
-  IMAGE_TAG: latest
+  IMAGE_TAG: alpine
   WORKING_DIRECTORY: redis #also used as an egg
 
 

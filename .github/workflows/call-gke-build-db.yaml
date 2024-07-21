@@ -37,7 +37,7 @@ env:
   DEPLOYMENT_NAME: db-deployment # TODO: update to deployment name
   REPOSITORY: dadismad # TODO: update to Artifact Registry docker repository
   IMAGE: postgres # not the same as WORKING DIRECTORY
-  IMAGE_TAG: latest
+  IMAGE_TAG: 15-alpine
   WORKING_DIRECTORY: db #also used as an egg but not the same as IMAGE
 
 
