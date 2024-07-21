@@ -77,7 +77,7 @@ jobs:
         sysdig-secure-url: ${{ secrets.SYSDIG_SECURE_URL }}
         cli-scanner-version: 1.9.0
         mode: iac
-        iac-scan-path: ./*
+        iac-scan-path: /
 
     # Configure Workload Identity Federation and generate an access token.
 
