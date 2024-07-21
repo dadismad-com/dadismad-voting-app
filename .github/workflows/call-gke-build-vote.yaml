@@ -69,9 +69,9 @@ jobs:
           k8s-specifications/${{ env.WORKING_DIRECTORY }}-service-lb.yaml
         sparse-checkout-cone-mode: false
 
-    # - name: Sysdig
-    #   run: SECURE_API_TOKEN=${{ secrets.SECURE_API_TOKEN }} $GITHUB_WORKSPACE/sysdig-cli-scanner --iac -r -f n --apiurl ${{ secrets.SYSDIG_SECURE_URL }} $GITHUB_WORKSPACE
+        
     # Configure Workload Identity Federation and generate an access token.
+
     - id: 'auth'
       name: 'Authenticate to Google Cloud'
       uses: 'google-github-actions/auth@v2'
@@ -86,6 +86,7 @@ jobs:
     - name: Docker configuration
       run: |-
         echo ${{steps.auth.outputs.access_token}} | docker login -u oauth2accesstoken --password-stdin https://$GAR_LOCATION-docker.pkg.dev
+
     # Get the GKE credentials so we can deploy to the cluster
     - name: Set up GKE credentials
       uses: google-github-actions/get-gke-credentials@v2
@@ -103,6 +104,14 @@ jobs:
           --build-arg GITHUB_REF="$GITHUB_REF" \
           . 
 
+    #Scanning after build but before upload
+    - name: Scan image
+      id: scan
+      uses: sysdiglabs/scan-action@v5
+      with:
+          image-tag: $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA
+          sysdig-secure-token: ${{ secrets.SECURE_API_TOKEN }}
+        
     # Push the Docker image to Google Artifact Registry
     - name: Publish
       run: |-
