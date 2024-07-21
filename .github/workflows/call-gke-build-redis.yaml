@@ -106,6 +106,12 @@ jobs:
           image-tag: "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ env.IMAGE_TAG }}"
           sysdig-secure-token: ${{ secrets.SECURE_API_TOKEN }}
           sysdig-secure-url: ${{ secrets.SYSDIG_SECURE_URL }}
+    
+    - name: Upload SARIF file
+      if: success() || failure() # Upload results regardless previous step fails
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: ${{ github.workspace }}/sarif.json
 
     # K8 File configuration
     - name: Stating context to cluster
