@@ -122,6 +122,12 @@ jobs:
           sysdig-secure-token: ${{ secrets.SECURE_API_TOKEN }}
           sysdig-secure-url: ${{ secrets.SYSDIG_SECURE_URL }}
 
+    - name: Upload SARIF file
+      if: success() || failure()
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: ${{ env.GITHUB_WORKSPACE }}/sarif.json
+
     #Print Logs
     - name: Print Log
       run: cat /home/runner/work/dadismad-voting-app/dadismad-voting-app/scan-logs
