@@ -69,7 +69,7 @@ jobs:
           k8s-specifications/${{ env.WORKING_DIRECTORY }}-service-lb.yaml
         sparse-checkout-cone-mode: false
 
-        
+
     # Configure Workload Identity Federation and generate an access token.
 
     - id: 'auth'
@@ -109,7 +109,7 @@ jobs:
       id: scan
       uses: sysdiglabs/scan-action@v5
       with:
-          image-tag: $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA
+          image-tag: "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA"
           sysdig-secure-token: ${{ secrets.SECURE_API_TOKEN }}
         
     # Push the Docker image to Google Artifact Registry
