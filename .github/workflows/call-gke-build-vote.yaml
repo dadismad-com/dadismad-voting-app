@@ -132,11 +132,12 @@ jobs:
         docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA"
 
     #Scanning after push from remote registry 
-    ##"${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ env.IMAGE_TAG }}"
+    
     - name: Scan image
-      uses: sysdiglabs/scan-action@v5
+      id: scan
+      uses: ./
       with:
-          image-tag: sysdiglabs/dummy-vuln-app:latest
+          image-tag: "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA"
           sysdig-secure-token: ${{ secrets.SECURE_API_TOKEN }}
           sysdig-secure-url: ${{ secrets.SYSDIG_SECURE_URL }}
 
