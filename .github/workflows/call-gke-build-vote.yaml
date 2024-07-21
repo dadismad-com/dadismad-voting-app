@@ -55,6 +55,13 @@ jobs:
       id-token: 'write'
 
     steps:
+
+    - name: Scan image
+      uses: sysdiglabs/scan-action@v5
+      with:
+        image-tag: "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA"
+        sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+
     - name: Checkout
       uses: actions/checkout@v4
       with:
@@ -75,8 +82,7 @@ jobs:
         sysdig-secure-token: ${{ secrets.SECURE_API_TOKEN }}
         cli-scanner-version: 1.9.0
         mode: iac
-        iac-scan-path: $GITHUB_WORKSPACE
-  
+        iac-scan-path: ./*
   
     # Configure Workload Identity Federation and generate an access token.
     - id: 'auth'
