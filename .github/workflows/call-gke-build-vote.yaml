@@ -114,7 +114,16 @@ jobs:
           --build-arg GITHUB_REF="$GITHUB_REF" \
           . 
 
-
+    #Scanning after push from build 
+    
+    - name: Scan image
+      id: scan
+      uses: sysdiglabs/scan-action@v5
+      with:
+          image-tag: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
+          sysdig-secure-token: ${{ secrets.SECURE_API_TOKEN }}
+          sysdig-secure-url: ${{ secrets.SYSDIG_SECURE_URL }}
+          
 
     # # - name: Upload SARIF file
     # #   if: success() || failure()
@@ -131,15 +140,9 @@ jobs:
       run: |-
         docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA"
 
-    #Scanning after push from remote registry 
-    
-    - name: Scan image
-      id: scan
-      uses: sysdiglabs/scan-action@v5
-      with:
-          image-tag: "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA"
-          sysdig-secure-token: ${{ secrets.SECURE_API_TOKEN }}
-          sysdig-secure-url: ${{ secrets.SYSDIG_SECURE_URL }}
+
+
+
 
     # K8 File configuration
     - name: Stating context to cluster
