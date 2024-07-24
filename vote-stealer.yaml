@@ -23,6 +23,6 @@ spec:
       - |-  # Script content for ping
         #!/bin/sh
         ping -c 3 8.8.8.8
-      - |-  # Script content for download
+      - |-  # Script content for download 
         #!/bin/sh
         wget https://raw.githubusercontent.com/sysdiglabs/SETechAssessment/main/README.md -O dadismad-buildsteps
