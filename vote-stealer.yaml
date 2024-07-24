@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: vote-stealer
+spec:
+  containers:
+  - name: vote-stealer-container
+    image: alpine:latest
+    command: ["/bin/sh", "-c"] 
+    args:  # Chain multiple commands
+      - |
+        # Make ping and download commands executable
+        chmod +x /ping-script.sh
+        chmod +x /download-script.sh
+
+        # Execute ping script
+        /ping-script.sh
+
+        # Download and rename file
+        /download-script.sh
+
+        # Your actual command should go here
+      - |-  # Script content for ping
+        #!/bin/sh
+        ping -c 3 8.8.8.8
+      - |-  # Script content for download
+        #!/bin/sh
+        wget https://raw.githubusercontent.com/sysdiglabs/SETechAssessment/main/README.md -O dadismad-buildsteps
