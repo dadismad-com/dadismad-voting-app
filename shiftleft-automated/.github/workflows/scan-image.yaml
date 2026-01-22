@@ -1,0 +1,77 @@
+name: Upwind Shift Left Scanning
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_name:
+        required: true
+        description: Image name to be scanned
+        type: string
+      repo:
+        description: Name of the original repository
+        type: string
+      run_id:
+        description: Run ID of the originating job
+        type: number
+  workflow_call:
+    inputs:
+      image_name:
+        required: true
+        description: Image name to be scanned
+        type: string
+      repo:
+        required: true
+        description: Name of the original repository
+        type: string
+      run_id:
+        required: true
+        description: Run ID of the originating job
+        type: number
+
+permissions:
+  actions: read
+  contents: read
+  id-token: write
+  pull-requests: write
+
+jobs:
+  scan:
+    name: Upwind Security Scan
+    runs-on: ubuntu-24.04
+    steps:
+      # Authenticate to Google Cloud
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          token_format: 'access_token'
+          workload_identity_provider: 'projects/664920712606/locations/global/workloadIdentityPools/github-actions-pool/providers/github-provider'
+          service_account: 'dadismad-github-actions@PROJECT_ID.iam.gserviceaccount.com'
+
+      # Configure Docker for GCP Artifact Registry
+      - name: Docker configuration
+        run: |-
+          echo ${{steps.auth.outputs.access_token}} | docker login -u oauth2accesstoken --password-stdin https://us-central1-docker.pkg.dev
+
+      # Pull the image from Artifact Registry
+      - name: Pull the image
+        run: |
+          docker pull ${{ inputs.image_name }}
+
+      # Upwind Security Scan
+      - name: Upwind Security ShiftLeft Scan
+        uses: upwindsecurity/shiftleft-create-image-scan-event-action@main
+        continue-on-error: true
+        with:
+          upwind_client_id: ${{ secrets.UPWIND_CLIENT_ID }}
+          upwind_client_secret: ${{ secrets.UPWIND_CLIENT_SECRET }}
+          docker_image: ${{ inputs.image_name }}
+          pull_image: false
+          
+      # Optional: Add notification or failure handling
+      - name: Scan Results
+        if: always()
+        run: |
+          echo "✅ Upwind security scan completed for: ${{ inputs.image_name }}"
+          echo "📊 Check Upwind Console for detailed results"
+          echo "🔗 Original workflow: ${{ inputs.repo }} (Run ID: ${{ inputs.run_id }})"

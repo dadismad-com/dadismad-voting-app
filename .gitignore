@@ -4,3 +4,10 @@ bin/
 obj/
 .vs/
 node_modules/
+
+# Upwind setup documentation (contains sensitive setup info)
+UPWIND_SETUP.md
+
+# Local configuration files
+gke-config.txt
+gke-config.txt.backup-*
