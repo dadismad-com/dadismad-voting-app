@@ -410,7 +410,8 @@ else
       --location="global" \
       --workload-identity-pool="github-actions-pool" \
       --display-name="GitHub Provider" \
-      --attribute-mapping="google.subject=assertion.sub,attribute.repository=assertion.repository" \
+      --attribute-mapping="google.subject=assertion.sub,attribute.repository=assertion.repository,attribute.repository_owner=assertion.repository_owner" \
+      --attribute-condition="assertion.repository_owner=='${GITHUB_REPO%%/*}'" \
       --issuer-uri="https://token.actions.githubusercontent.com"
     print_success "Provider created"
 fi
