@@ -497,15 +497,9 @@ echo -e "${CYAN}${BOLD}╔══════════════════
 echo -e "${CYAN}${BOLD}║                    NEXT STEPS                             ║${NC}"
 echo -e "${CYAN}${BOLD}╚═══════════════════════════════════════════════════════════╝${NC}\n"
 
-echo -e "${YELLOW}${BOLD}1. Add GitHub Secrets${NC} (Settings → Secrets → Actions):"
-echo -e "   ${GREEN}├─${NC} Name: ${BOLD}GKE_PROJECT${NC}"
-echo -e "   ${GREEN}│  ${NC}Value: ${CYAN}$PROJECT_ID${NC}"
-echo ""
-echo -e "   ${GREEN}├─${NC} Name: ${BOLD}SECURE_API_TOKEN${NC}"
-echo -e "   ${GREEN}│  ${NC}Value: [Your Sysdig token - or skip scanning]"
-echo ""
-echo -e "   ${GREEN}└─${NC} Name: ${BOLD}SYSDIG_SECURE_URL${NC}"
-echo -e "      Value: ${CYAN}https://us2.app.sysdig.com${NC}"
+echo -e "${YELLOW}${BOLD}1. Add GitHub Secret${NC} (Settings → Secrets → Actions):"
+echo -e "   ${GREEN}└─${NC} Name: ${BOLD}GKE_PROJECT${NC}"
+echo -e "      Value: ${CYAN}$PROJECT_ID${NC}"
 echo ""
 
 echo -e "${YELLOW}${BOLD}2. Commit and push changes:${NC}"

@@ -17,10 +17,6 @@ on:
     secrets:
       GKE_PROJECT:
         required: true
-      SECURE_API_TOKEN:
-        required: true
-      SYSDIG_SECURE_URL:
-        required: true
   workflow_dispatch: # Allow manual trigger
 
 env:
@@ -55,25 +51,14 @@ jobs:
           k8s-specifications/${{ env.WORKING_DIRECTORY }}-service.yaml
         sparse-checkout-cone-mode: false
 
-    #Scanning Infrastructure 
-    - name: Scan infrastructure
-      uses: sysdiglabs/scan-action@v5
-      with:
-        sysdig-secure-token: ${{ secrets.SECURE_API_TOKEN }}
-        sysdig-secure-url: ${{ secrets.SYSDIG_SECURE_URL }}
-        cli-scanner-version: 1.9.0
-        mode: iac
-        iac-scan-path: ./
-        recursive: true
-
     # Configure Workload Identity Federation and generate an access token.
     - id: 'auth'
       name: 'Authenticate to Google Cloud'
       uses: 'google-github-actions/auth@v2'
       with:
         token_format: 'access_token'
-        workload_identity_provider: 'projects/250238953270/locations/global/workloadIdentityPools/dadismad/providers/dadismad-github'
-        service_account: 'dadismad-github-actions@macro-truck-198415.iam.gserviceaccount.com'
+        workload_identity_provider: 'projects/664920712606/locations/global/workloadIdentityPools/github-actions-pool/providers/github-provider'
+        service_account: 'dadismad-github-actions@PROJECT_ID.iam.gserviceaccount.com'
 
 
 
@@ -87,20 +72,6 @@ jobs:
 
         cluster_name: ${{ env.GKE_CLUSTER }}
         location: ${{ env.GKE_ZONE }}
-
-    #Scanning remote database - updated to look at public container
-    - name: Scan image
-      uses: sysdiglabs/scan-action@v5
-      with:
-          image-tag: "${{ env.IMAGE }}:${{ env.IMAGE_TAG }}"
-          sysdig-secure-token: ${{ secrets.SECURE_API_TOKEN }}
-          sysdig-secure-url: ${{ secrets.SYSDIG_SECURE_URL }}
-    
-    # - name: Upload SARIF file
-    #   if: success() || failure() # Upload results regardless previous step fails
-    #   uses: github/codeql-action/upload-sarif@v3
-    #   with:
-    #     sarif_file: ${{ github.workspace }}/sarif.json
 
     # K8 File configuration
     - name: Stating context to cluster

@@ -80,18 +80,11 @@ Follow the detailed guide: **[SETUP_GKE_CONNECTION.md](SETUP_GKE_CONNECTION.md)*
 
 Go to: `https://github.com/YOUR-ORG/dadismad-voting-app/settings/secrets/actions`
 
-Add these 3 secrets:
+Add this secret:
 
 | Secret Name | Value |
 |-------------|-------|
 | `GKE_PROJECT` | Your GCP Project ID (from setup) |
-| `SECURE_API_TOKEN` | Your Sysdig token (optional) |
-| `SYSDIG_SECURE_URL` | `https://us2.app.sysdig.com` |
-
-**Don't have Sysdig?** 
-- Skip it for now
-- Or sign up: https://sysdig.com/
-- Or remove scanning steps from workflows
 
 ### 2. Commit and Push
 

@@ -136,28 +136,13 @@ Go to: `https://github.com/YOUR-ORG/dadismad-voting-app/settings/secrets/actions
 
 Add these 3 secrets:
 
-**Secret 1: GKE_PROJECT**
+**Secret: GKE_PROJECT**
 ```
 Name: GKE_PROJECT
 Value: [Your project ID from setup script]
 ```
 
-**Secret 2: SECURE_API_TOKEN** (Optional - for security scanning)
-```
-Name: SECURE_API_TOKEN
-Value: [Your Sysdig token, or skip for now]
-```
-
-**Secret 3: SYSDIG_SECURE_URL** (Optional)
-```
-Name: SYSDIG_SECURE_URL
-Value: https://us2.app.sysdig.com
-```
-
-**Don't have Sysdig?** That's okay! You can:
-- Skip it (workflows will still work)
-- Comment out the scanning steps in workflows
-- Or sign up at https://sysdig.com/
+That's it! Only one secret needed.
 
 ### Step 3: Commit and Push
 
