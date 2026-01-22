@@ -61,11 +61,11 @@ if [ -f "gke-config.txt" ]; then
     CLUSTER_TYPE=$(grep "^Cluster Type:" gke-config.txt | cut -d: -f2 | xargs)
     
     if [[ "$CLUSTER_TYPE" == *"Regional"* ]]; then
-        CLUSTER_REGION=$(echo "$CLUSTER_TYPE" | grep -oP '\(\K[^)]+')
+        CLUSTER_REGION=$(echo "$CLUSTER_TYPE" | sed 's/.*(\(.*\)).*/\1/')
         CLUSTER_ZONE=""
         IS_REGIONAL=true
     else
-        CLUSTER_ZONE=$(echo "$CLUSTER_TYPE" | grep -oP '\(\K[^)]+')
+        CLUSTER_ZONE=$(echo "$CLUSTER_TYPE" | sed 's/.*(\(.*\)).*/\1/')
         CLUSTER_REGION=""
         IS_REGIONAL=false
     fi
