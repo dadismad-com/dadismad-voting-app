@@ -1,0 +1,139 @@
+# Main GKE Deployment Workflow
+# Orchestrates deployment of all services to Google Kubernetes Engine
+# Deploys infrastructure first (db, redis), then application services (vote, result, worker)
+
+name: Deploy to GKE
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'vote/**'
+      - 'result/**'
+      - 'worker/**'
+      - 'k8s-specifications/**'
+      - '.github/workflows/deploy-to-gke.yaml'
+      - '.github/workflows/call-gke-*.yaml'
+  workflow_dispatch: # Allow manual trigger
+    inputs:
+      deploy_all:
+        description: 'Deploy all services (ignore path changes)'
+        required: false
+        default: 'false'
+
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  GAR_LOCATION: us-central1
+  GKE_CLUSTER: dadismad-cluster-1
+  GKE_ZONE: us-central1
+  REPOSITORY: dadismad
+
+jobs:
+  # Determine what changed
+  detect-changes:
+    name: Detect Changed Services
+    runs-on: ubuntu-latest
+    outputs:
+      vote: ${{ steps.changes.outputs.vote }}
+      result: ${{ steps.changes.outputs.result }}
+      worker: ${{ steps.changes.outputs.worker }}
+      k8s: ${{ steps.changes.outputs.k8s }}
+      deploy_all: ${{ steps.check.outputs.deploy_all }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      
+      - name: Check manual deploy all
+        id: check
+        run: |
+          if [ "${{ github.event.inputs.deploy_all }}" == "true" ]; then
+            echo "deploy_all=true" >> $GITHUB_OUTPUT
+          else
+            echo "deploy_all=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            vote:
+              - 'vote/**'
+              - 'k8s-specifications/vote-*.yaml'
+            result:
+              - 'result/**'
+              - 'k8s-specifications/result-*.yaml'
+            worker:
+              - 'worker/**'
+              - 'k8s-specifications/worker-*.yaml'
+            k8s:
+              - 'k8s-specifications/db-*.yaml'
+              - 'k8s-specifications/redis-*.yaml'
+
+  # Deploy infrastructure services first (PostgreSQL)
+  deploy-db:
+    name: Deploy Database
+    needs: detect-changes
+    if: needs.detect-changes.outputs.k8s == 'true' || needs.detect-changes.outputs.deploy_all == 'true'
+    uses: ./.github/workflows/call-gke-build-db.yaml
+    secrets: inherit
+
+  deploy-redis:
+    name: Deploy Redis
+    needs: detect-changes
+    if: needs.detect-changes.outputs.k8s == 'true' || needs.detect-changes.outputs.deploy_all == 'true'
+    uses: ./.github/workflows/call-gke-build-redis.yaml
+    secrets: inherit
+
+  # Deploy application services after infrastructure
+  deploy-vote:
+    name: Deploy Vote Service
+    needs: [detect-changes, deploy-db, deploy-redis]
+    if: |
+      always() &&
+      (needs.detect-changes.outputs.vote == 'true' || needs.detect-changes.outputs.deploy_all == 'true') &&
+      (needs.deploy-db.result == 'success' || needs.deploy-db.result == 'skipped') &&
+      (needs.deploy-redis.result == 'success' || needs.deploy-redis.result == 'skipped')
+    uses: ./.github/workflows/call-gke-build-vote.yaml
+    secrets: inherit
+
+  deploy-result:
+    name: Deploy Result Service
+    needs: [detect-changes, deploy-db, deploy-redis]
+    if: |
+      always() &&
+      (needs.detect-changes.outputs.result == 'true' || needs.detect-changes.outputs.deploy_all == 'true') &&
+      (needs.deploy-db.result == 'success' || needs.deploy-db.result == 'skipped') &&
+      (needs.deploy-redis.result == 'success' || needs.deploy-redis.result == 'skipped')
+    uses: ./.github/workflows/call-gke-build-result.yaml
+    secrets: inherit
+
+  deploy-worker:
+    name: Deploy Worker Service
+    needs: [detect-changes, deploy-db, deploy-redis]
+    if: |
+      always() &&
+      (needs.detect-changes.outputs.worker == 'true' || needs.detect-changes.outputs.deploy_all == 'true') &&
+      (needs.deploy-db.result == 'success' || needs.deploy-db.result == 'skipped') &&
+      (needs.deploy-redis.result == 'success' || needs.deploy-redis.result == 'skipped')
+    uses: ./.github/workflows/call-gke-build-worker.yaml
+    secrets: inherit
+
+  # Summary job
+  deployment-summary:
+    name: Deployment Summary
+    runs-on: ubuntu-latest
+    needs: [deploy-vote, deploy-result, deploy-worker]
+    if: always()
+    steps:
+      - name: Print deployment status
+        run: |
+          echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Service | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Vote | ${{ needs.deploy-vote.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Result | ${{ needs.deploy-result.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Worker | ${{ needs.deploy-worker.result }} |" >> $GITHUB_STEP_SUMMARY

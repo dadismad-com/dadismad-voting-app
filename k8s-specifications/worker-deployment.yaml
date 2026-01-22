@@ -15,5 +15,12 @@ spec:
         app: worker
     spec:
       containers:
-      - image: dockersamples/examplevotingapp_worker
+      - image: us-central1-docker.pkg.dev/PROJECT_ID/dadismad/worker:latest
         name: worker
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
