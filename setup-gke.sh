@@ -153,7 +153,26 @@ else
 fi
 
 # Get billing account
-if [ "$PROJECT_IS_NEW" = true ] || ! gcloud beta billing projects describe $PROJECT_ID &> /dev/null 2>&1; then
+NEEDS_BILLING=false
+if [ "$PROJECT_IS_NEW" = true ]; then
+    NEEDS_BILLING=true
+else
+    # Check billing status with visual feedback
+    echo ""
+    print_info "Checking billing status (this may take 5-10 seconds)..."
+    printf "${CYAN}   Waiting for response"
+    
+    # Run check in background with timeout
+    if timeout 15s gcloud beta billing projects describe $PROJECT_ID &> /dev/null 2>&1; then
+        printf "\r${CYAN}   ✓ Billing already configured!                ${NC}\n"
+        NEEDS_BILLING=false
+    else
+        printf "\r${CYAN}   ⚠ Billing needs to be configured             ${NC}\n"
+        NEEDS_BILLING=true
+    fi
+fi
+
+if [ "$NEEDS_BILLING" = true ]; then
     echo ""
     read -p "Enter billing account ID (from console.cloud.google.com/billing): " BILLING_ACCOUNT
     if [ -z "$BILLING_ACCOUNT" ]; then
@@ -216,8 +235,8 @@ fi
 gcloud config set project $PROJECT_ID >/dev/null 2>&1
 print_success "Active project set to: $PROJECT_ID"
 
-# Link billing if needed
-if ! gcloud beta billing projects describe $PROJECT_ID &> /dev/null 2>&1; then
+# Link billing if needed (we already checked earlier)
+if [ "$NEEDS_BILLING" = true ]; then
     print_info "Linking billing account..."
     gcloud beta billing projects link $PROJECT_ID --billing-account=$BILLING_ACCOUNT 2>&1 | grep -v "WARNING" || true
     print_success "Billing linked"
