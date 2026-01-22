@@ -40,21 +40,19 @@ The absolute fastest way to get your voting app running on Google Kubernetes Eng
 
 ## 🎯 Option 1: Automated Setup (Recommended)
 
-**Run the setup script - it does everything for you!**
+**Run ONE unified script that handles both new AND existing projects!**
 
 ```bash
-# Make script executable
-chmod +x setup-gke.sh
-
 # Run the setup
 ./setup-gke.sh
 ```
 
-**The script will ask you for:**
-1. Your GCP Project ID (or create new one)
-2. Your billing account ID
-3. Your GitHub repository name
-4. Development or Production cluster
+**The script will ask you:**
+1. Use EXISTING project or create NEW one?
+2. Project ID (shows list if existing)
+3. Billing account ID (if needed)
+4. GitHub repository name
+5. Development or Production cluster
 
 **Then it automatically:**
 - ✅ Creates GCP project

@@ -10,13 +10,13 @@
 
 ### Option 1: Automated (15 minutes) - RECOMMENDED
 
-**Run one script and it does everything:**
+**Run ONE script that handles everything:**
 
 ```bash
 ./setup-gke.sh
 ```
 
-Then follow the prompts. The script will:
+The script will ask if you want to use a NEW or EXISTING project, then:
 - Create GCP project
 - Set up GKE cluster
 - Configure all permissions
