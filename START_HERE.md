@@ -48,6 +48,28 @@ You'll manually:
 
 ---
 
+### Option 3: Cleanup (5 minutes) - Delete Resources
+
+**Need to tear down your GKE deployment?**
+
+```bash
+./cleanup-gke.sh
+```
+
+The script will:
+- Show you what will be deleted
+- Calculate cost savings
+- Require double confirmation (safety!)
+- Delete GKE cluster
+- Delete Artifact Registry
+- Delete Workload Identity Pool/Provider
+- Delete Service Account
+- Backup your config file
+
+**Cost savings:** ~$100-300/month depending on cluster type
+
+---
+
 ## 📋 Prerequisites (Both Options)
 
 ### 1. Google Cloud Account
