@@ -31,7 +31,7 @@ env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GAR_LOCATION: us-central1
   GKE_CLUSTER: dadismad-cluster-1
-  GKE_ZONE: us-central1
+  GKE_ZONE: us-central1-a
   REPOSITORY: dadismad
 
 jobs:
