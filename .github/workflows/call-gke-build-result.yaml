@@ -62,7 +62,7 @@ jobs:
       with:
         token_format: 'access_token'
         workload_identity_provider: 'projects/664920712606/locations/global/workloadIdentityPools/github-actions-pool/providers/github-provider'
-        service_account: 'dadismad-github-actions@PROJECT_ID.iam.gserviceaccount.com'
+        service_account: 'dadismad-github-actions@dadismad-sysdig.iam.gserviceaccount.com'
 
     - name: Docker configuration
       run: |-

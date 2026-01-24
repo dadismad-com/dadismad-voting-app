@@ -15,7 +15,7 @@ spec:
         app: worker
     spec:
       containers:
-      - image: us-central1-docker.pkg.dev/PROJECT_ID/dadismad/worker:latest
+      - image: us-central1-docker.pkg.dev/dadismad-sysdig/dadismad/worker:latest
         name: worker
         resources:
           requests:

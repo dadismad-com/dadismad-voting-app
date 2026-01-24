@@ -22,6 +22,11 @@ on:
         required: false
         default: 'false'
 
+# Required for Workload Identity Federation in called workflows
+permissions:
+  contents: read
+  id-token: write
+
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GAR_LOCATION: us-central1
