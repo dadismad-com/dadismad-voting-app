@@ -219,6 +219,42 @@ terraform output -json github_actions_config
 terraform output -raw service_account_email
 ```
 
+### Getting Application URLs
+
+After deploying your application via GitHub Actions, you can get the LoadBalancer IPs/URLs:
+
+**Option 1: Use the helper script (easiest)**
+```bash
+./get-urls.sh
+```
+
+**Option 2: Manual terraform command**
+```bash
+# Enable service checking and get URLs
+terraform apply -var='check_services=true'
+
+# View URLs
+terraform output vote_app_url
+terraform output result_app_url
+```
+
+**Option 3: Using kubectl directly**
+```bash
+# Get cluster credentials first
+$(terraform output -raw get_credentials_command)
+
+# Get LoadBalancer IPs
+kubectl get svc vote-lb result-lb
+
+# Get vote app URL
+echo "http://$(kubectl get svc vote-lb -o jsonpath='{.status.loadBalancer.ingress[0].ip}')"
+
+# Get result app URL
+echo "http://$(kubectl get svc result-lb -o jsonpath='{.status.loadBalancer.ingress[0].ip}')"
+```
+
+**Note:** Services must be deployed via GitHub Actions before URLs are available. If you see "Not checked" or "<pending>", deploy your application first.
+
 ### Updating Infrastructure
 
 ```bash

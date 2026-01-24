@@ -17,6 +17,10 @@ terraform {
       source  = "hashicorp/google-beta"
       version = "~> 5.0"
     }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.23"
+    }
   }
 
   # Uncomment to use remote state (recommended for teams)
@@ -39,6 +43,16 @@ provider "google-beta" {
   project = var.project_id
   region  = var.region
 }
+
+# Kubernetes provider - configured after GKE cluster is created
+provider "kubernetes" {
+  host                   = "https://${module.gke.cluster_endpoint}"
+  token                  = data.google_client_config.default.access_token
+  cluster_ca_certificate = base64decode(module.gke.cluster_ca_certificate)
+}
+
+# Get current client configuration
+data "google_client_config" "default" {}
 
 # ============================================================================
 # Data Sources
@@ -169,4 +183,32 @@ resource "google_artifact_registry_repository_iam_member" "gke_reader" {
     module.artifact_registry,
     module.gke
   ]
+}
+
+# ============================================================================
+# Read LoadBalancer Services (if deployed)
+# ============================================================================
+# These data sources read the LoadBalancer services after they're deployed
+# via GitHub Actions. Use: terraform refresh to update IPs after deployment
+
+data "kubernetes_service" "vote_lb" {
+  count = var.check_services ? 1 : 0
+  
+  metadata {
+    name      = "vote-lb"
+    namespace = "default"
+  }
+
+  depends_on = [module.gke]
+}
+
+data "kubernetes_service" "result_lb" {
+  count = var.check_services ? 1 : 0
+  
+  metadata {
+    name      = "result-lb"
+    namespace = "default"
+  }
+
+  depends_on = [module.gke]
 }

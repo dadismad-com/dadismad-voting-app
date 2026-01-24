@@ -126,3 +126,13 @@ variable "labels" {
     environment = "production"
   }
 }
+
+# ============================================================================
+# Application Configuration
+# ============================================================================
+
+variable "check_services" {
+  description = "Check for deployed Kubernetes services (LoadBalancers). Set to true after deploying via GitHub Actions."
+  type        = bool
+  default     = false
+}

@@ -131,6 +131,46 @@ output "kubectl_config_command" {
 }
 
 # ============================================================================
+# Application Endpoints (LoadBalancer IPs)
+# ============================================================================
+
+locals {
+  vote_ip = var.check_services ? try(
+    length(data.kubernetes_service.vote_lb[0].status[0].load_balancer[0].ingress) > 0 ? 
+      data.kubernetes_service.vote_lb[0].status[0].load_balancer[0].ingress[0].ip : 
+      "<pending>",
+    "<pending>"
+  ) : "Not checked - set check_services=true and run: terraform apply -var='check_services=true'"
+  
+  result_ip = var.check_services ? try(
+    length(data.kubernetes_service.result_lb[0].status[0].load_balancer[0].ingress) > 0 ? 
+      data.kubernetes_service.result_lb[0].status[0].load_balancer[0].ingress[0].ip : 
+      "<pending>",
+    "<pending>"
+  ) : "Not checked - set check_services=true and run: terraform apply -var='check_services=true'"
+}
+
+output "vote_app_url" {
+  description = "URL for the Vote application"
+  value       = can(regex("^\\d+\\.\\d+\\.\\d+\\.\\d+$", local.vote_ip)) ? "http://${local.vote_ip}" : local.vote_ip
+}
+
+output "result_app_url" {
+  description = "URL for the Result application"
+  value       = can(regex("^\\d+\\.\\d+\\.\\d+\\.\\d+$", local.result_ip)) ? "http://${local.result_ip}" : local.result_ip
+}
+
+output "vote_ip" {
+  description = "External IP of the Vote LoadBalancer"
+  value       = local.vote_ip
+}
+
+output "result_ip" {
+  description = "External IP of the Result LoadBalancer"
+  value       = local.result_ip
+}
+
+# ============================================================================
 # Summary
 # ============================================================================
 
@@ -159,6 +199,10 @@ output "deployment_summary" {
   🔑 Workload Identity:
      Provider: ${module.workload_identity.provider_full_path}
   
+  🌐 Application URLs:
+     Vote App:   ${can(regex("^\\d+\\.\\d+\\.\\d+\\.\\d+$", local.vote_ip)) ? "http://${local.vote_ip}" : local.vote_ip}
+     Result App: ${can(regex("^\\d+\\.\\d+\\.\\d+\\.\\d+$", local.result_ip)) ? "http://${local.result_ip}" : local.result_ip}
+  
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   
   📝 Next Steps:
@@ -170,12 +214,14 @@ output "deployment_summary" {
      Name: GKE_PROJECT
      Value: ${var.project_id}
   
-  3. Update Kubernetes manifests:
-     Replace PROJECT_ID with: ${var.project_id}
+  3. Deploy via GitHub Actions:
+     Trigger workflow: https://github.com/dadismad-com/dadismad-voting-app/actions
+     (Or run: gh workflow run deploy-to-gke.yaml --ref main)
   
-  4. Update GitHub Actions workflows:
-     - workload_identity_provider: ${module.workload_identity.provider_full_path}
-     - service_account: ${module.github_service_account.email}
+  4. Get application URLs (after deployment):
+     terraform apply -var='check_services=true'
+     Or: terraform output vote_app_url
+         terraform output result_app_url
   
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   

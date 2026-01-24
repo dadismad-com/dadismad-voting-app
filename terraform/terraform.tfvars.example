@@ -66,3 +66,10 @@ labels = {
   environment = "production"
   team        = "platform"
 }
+
+# ============================================================================
+# Application Configuration
+# ============================================================================
+
+# Set to true after deploying via GitHub Actions to check LoadBalancer IPs
+# check_services = true
