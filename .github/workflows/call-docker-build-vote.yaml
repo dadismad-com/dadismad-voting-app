@@ -1,22 +1,24 @@
-name: Build Vote
+name: Build Vote (DISABLED - Using GKE workflows instead)
 # template source: https://github.com/dockersamples/.github/blob/main/templates/call-docker-build.yaml
+# DISABLED: This workflow is replaced by call-gke-build-vote.yaml which builds and deploys to GKE
 
 on:
-  # we want pull requests so we can build(test) but not push to image registry
-  push:
-    branches:
-      - 'main'
-    # only build when important files change
-    paths:
-      - 'vote/**'
-      - '.github/workflows/call-docker-build-vote.yaml'
-  pull_request:
-    branches:
-      - 'main'
-    # only build when important files change
-    paths:
-      - 'vote/**'
-      - '.github/workflows/call-docker-build-vote.yaml'
+  workflow_dispatch:  # Only manual trigger, disabled for push/PR
+  # # we want pull requests so we can build(test) but not push to image registry
+  # push:
+  #   branches:
+  #     - 'main'
+  #   # only build when important files change
+  #   paths:
+  #     - 'vote/**'
+  #     - '.github/workflows/call-docker-build-vote.yaml'
+  # pull_request:
+  #   branches:
+  #     - 'main'
+  #   # only build when important files change
+  #   paths:
+  #     - 'vote/**'
+  #     - '.github/workflows/call-docker-build-vote.yaml'
 
 jobs:
   call-docker-build:
