@@ -1,0 +1,68 @@
+# ============================================================================
+# Terraform Variables Example
+# ============================================================================
+# Copy this file to terraform.tfvars and fill in your values
+# WARNING: Never commit terraform.tfvars to git!
+# ============================================================================
+
+# ============================================================================
+# Project Configuration
+# ============================================================================
+
+project_id = "your-gcp-project-id"
+region     = "us-central1"
+zones      = ["us-central1-a"]
+
+# ============================================================================
+# GKE Cluster Configuration
+# ============================================================================
+
+cluster_name = "dadismad-cluster-1"
+
+# Development cluster (zonal, smaller)
+is_regional  = false
+node_count   = 2
+machine_type = "e2-standard-2"
+disk_size_gb = 20
+min_nodes    = 2
+max_nodes    = 4
+
+# Production cluster (regional, larger) - uncomment and adjust for production
+# is_regional  = true
+# node_count   = 1
+# machine_type = "n1-standard-2"
+# disk_size_gb = 50
+# min_nodes    = 3
+# max_nodes    = 10
+
+# ============================================================================
+# Artifact Registry Configuration
+# ============================================================================
+
+artifact_registry_name = "dadismad"
+
+# ============================================================================
+# GitHub Integration Configuration
+# ============================================================================
+
+github_repository       = "dadismad-com/dadismad-voting-app"
+github_repository_owner = "dadismad-com"
+
+# ============================================================================
+# Service Account & Workload Identity
+# ============================================================================
+
+service_account_name          = "dadismad-github-actions"
+workload_identity_pool_id     = "github-actions-pool"
+workload_identity_provider_id = "github-provider"
+
+# ============================================================================
+# Labels
+# ============================================================================
+
+labels = {
+  application = "voting-app"
+  managed-by  = "terraform"
+  environment = "production"
+  team        = "platform"
+}

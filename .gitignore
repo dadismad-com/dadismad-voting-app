@@ -11,3 +11,17 @@ UPWIND_SETUP.md
 # Local configuration files
 gke-config.txt
 gke-config.txt.backup-*
+
+# Terraform
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/terraform.tfvars
+terraform/**/*.tfstate
+terraform/**/*.tfstate.backup
+terraform/**/.terraform/
+terraform/**/.terraform.lock.hcl
+terraform/**/terraform.tfvars
+.terraformrc
+terraform.rc
