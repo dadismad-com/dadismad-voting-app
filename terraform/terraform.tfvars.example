@@ -73,3 +73,11 @@ labels = {
 
 # Set to true after deploying via GitHub Actions to check LoadBalancer IPs
 # check_services = true
+
+# ============================================================================
+# Cluster Protection
+# ============================================================================
+
+# Set to false to allow destroying the cluster with terraform destroy
+# IMPORTANT: Production clusters should keep this as true!
+# deletion_protection = false

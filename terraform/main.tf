@@ -96,12 +96,13 @@ module "gke" {
   zones        = var.zones
   
   # Cluster configuration
-  is_regional     = var.is_regional
-  node_count      = var.node_count
-  machine_type    = var.machine_type
-  disk_size_gb    = var.disk_size_gb
-  min_nodes       = var.min_nodes
-  max_nodes       = var.max_nodes
+  is_regional         = var.is_regional
+  node_count          = var.node_count
+  machine_type        = var.machine_type
+  disk_size_gb        = var.disk_size_gb
+  min_nodes           = var.min_nodes
+  max_nodes           = var.max_nodes
+  deletion_protection = var.deletion_protection
 
   depends_on = [google_project_service.required_apis]
 }

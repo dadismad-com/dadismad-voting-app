@@ -136,3 +136,9 @@ variable "check_services" {
   type        = bool
   default     = false
 }
+
+variable "deletion_protection" {
+  description = "Whether to enable deletion protection on the GKE cluster. Set to false to allow terraform destroy."
+  type        = bool
+  default     = true
+}

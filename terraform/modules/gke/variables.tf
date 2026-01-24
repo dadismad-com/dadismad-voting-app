@@ -57,3 +57,9 @@ variable "labels" {
   type        = map(string)
   default     = {}
 }
+
+variable "deletion_protection" {
+  description = "Whether to enable deletion protection on the cluster. Set to false to allow terraform destroy."
+  type        = bool
+  default     = true
+}
