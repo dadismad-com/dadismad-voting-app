@@ -28,9 +28,6 @@ resource "google_container_cluster" "primary" {
   # Network configuration
   network    = "default"
   subnetwork = "default"
-
-  # Cluster features
-  enable_autopilot = false
   
   # IP allocation policy (required for VPC-native cluster)
   ip_allocation_policy {
@@ -80,14 +77,6 @@ resource "google_container_cluster" "primary" {
     horizontal_pod_autoscaling {
       disabled = false
     }
-    network_policy_config {
-      disabled = true
-    }
-  }
-
-  # Network policy
-  network_policy {
-    enabled = false
   }
 
   lifecycle {
